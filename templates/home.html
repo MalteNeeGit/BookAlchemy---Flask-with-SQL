@@ -1,0 +1,342 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digital Library</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f0d0a;
+      --surface: #1a1713;
+      --surface2: #242018;
+      --gold: #c9a84c;
+      --gold-light: #e8c97a;
+      --cream: #f0e6d3;
+      --muted: #7a7060;
+      --danger: #c0392b;
+      --danger-hover: #e74c3c;
+      --border: #2e2920;
+      --radius: 12px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--cream);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      background-image:
+        radial-gradient(ellipse at 20% 20%, rgba(201,168,76,0.04) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 80%, rgba(201,168,76,0.03) 0%, transparent 60%);
+    }
+
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 2rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      background: rgba(15,13,10,0.95);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      color: var(--gold);
+      letter-spacing: 0.02em;
+    }
+
+    .logo span {
+      font-style: italic;
+      color: var(--cream);
+    }
+
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-left: 2rem;
+      transition: color 0.2s;
+    }
+
+    nav a:hover { color: var(--gold); }
+
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 3rem 0 4rem;
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 400;
+      line-height: 1.15;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-top: 0.75rem;
+      letter-spacing: 0.04em;
+    }
+
+    /* Search & Controls */
+    .controls {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .search-form {
+      display: flex;
+      flex: 1;
+      min-width: 260px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+
+    .search-form:focus-within {
+      border-color: var(--gold);
+    }
+
+    .search-form input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      padding: 0.85rem 1.2rem;
+      color: var(--cream);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+    }
+
+    .search-form input::placeholder { color: var(--muted); }
+
+    .search-form button {
+      background: var(--gold);
+      border: none;
+      padding: 0.85rem 1.4rem;
+      color: var(--bg);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .search-form button:hover { background: var(--gold-light); }
+
+    .sort-links {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .sort-btn {
+      display: inline-block;
+      padding: 0.75rem 1.2rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.82rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .sort-btn:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    /* Book Grid */
+    .book-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 2rem;
+    }
+
+    .book-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+      position: relative;
+    }
+
+    .book-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--gold);
+      box-shadow: 0 12px 40px rgba(201,168,76,0.1);
+    }
+
+    .book-cover {
+      width: 100%;
+      aspect-ratio: 2/3;
+      object-fit: cover;
+      display: block;
+      background: var(--surface2);
+    }
+
+    .book-info {
+      padding: 1rem 1.1rem 1.2rem;
+    }
+
+    .book-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 0.35rem;
+      color: var(--cream);
+    }
+
+    .book-author {
+      font-size: 0.8rem;
+      color: var(--gold);
+      letter-spacing: 0.03em;
+      margin-bottom: 1rem;
+    }
+
+    .delete-form button {
+      width: 100%;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--muted);
+      padding: 0.5rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .delete-form button:hover {
+      background: var(--danger);
+      border-color: var(--danger);
+      color: #fff;
+    }
+
+    /* Empty State */
+    .empty {
+      text-align: center;
+      padding: 5rem 2rem;
+      color: var(--muted);
+    }
+
+    .empty-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      opacity: 0.4;
+    }
+
+    .empty p {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.2rem;
+    }
+
+    /* Animations */
+    .book-card {
+      animation: fadeUp 0.4s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .book-card:nth-child(2) { animation-delay: 0.05s; }
+    .book-card:nth-child(3) { animation-delay: 0.1s; }
+    .book-card:nth-child(4) { animation-delay: 0.15s; }
+    .book-card:nth-child(5) { animation-delay: 0.2s; }
+    .book-card:nth-child(6) { animation-delay: 0.25s; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">Digital <span>Library</span></div>
+    <nav>
+      <a href="/">Bibliothek</a>
+      <a href="/add_book">+ Buch</a>
+      <a href="/add_author">+ Autor</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="hero">
+      <h1>Deine <em>Bibliothek</em></h1>
+      <p>{{ books|length }} Bücher in deiner Sammlung</p>
+    </div>
+
+    <div class="controls">
+      <form class="search-form" action="/" method="get">
+        <input type="text" name="q" placeholder="Titel suchen..." aria-label="Suche">
+        <button type="submit">Suchen</button>
+      </form>
+      <div class="sort-links">
+        <a class="sort-btn" href="/?sort=title">A–Z Titel</a>
+        <a class="sort-btn" href="/?sort=author">A–Z Autor</a>
+      </div>
+    </div>
+
+    {% if books %}
+      <div class="book-grid">
+        {% for book in books %}
+        <div class="book-card">
+          <img class="book-cover"
+               src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-M.jpg"
+               alt="{{ book.title }}">
+          <div class="book-info">
+            <div class="book-title">{{ book.title }}</div>
+            <div class="book-author">{{ book.author.name }}</div>
+            <form class="delete-form" action="/book/{{ book.id }}/delete" method="POST">
+              <button type="submit">Entfernen</button>
+            </form>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty">
+        <div class="empty-icon">📚</div>
+        <p>Keine Bücher gefunden.</p>
+      </div>
+    {% endif %}
+  </main>
+
+</body>
+</html>

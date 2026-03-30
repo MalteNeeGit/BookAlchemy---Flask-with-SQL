@@ -1,0 +1,290 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buch hinzufügen – Digital Library</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f0d0a;
+      --surface: #1a1713;
+      --surface2: #242018;
+      --gold: #c9a84c;
+      --gold-light: #e8c97a;
+      --cream: #f0e6d3;
+      --muted: #7a7060;
+      --border: #2e2920;
+      --success-bg: #1a2e1a;
+      --success-border: #2d5a2d;
+      --success-text: #6fcf6f;
+      --radius: 12px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--cream);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      background-image:
+        radial-gradient(ellipse at 20% 20%, rgba(201,168,76,0.04) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 80%, rgba(201,168,76,0.03) 0%, transparent 60%);
+    }
+
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 2rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      background: rgba(15,13,10,0.95);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      color: var(--gold);
+      letter-spacing: 0.02em;
+    }
+
+    .logo span { font-style: italic; color: var(--cream); }
+
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-left: 2rem;
+      transition: color 0.2s;
+    }
+
+    nav a:hover { color: var(--gold); }
+
+    main {
+      max-width: 560px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+
+    .page-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      font-weight: 400;
+      margin-bottom: 0.5rem;
+    }
+
+    .page-title em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .page-subtitle {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 2.5rem;
+      letter-spacing: 0.03em;
+    }
+
+    .success-banner {
+      background: var(--success-bg);
+      border: 1px solid var(--success-border);
+      color: var(--success-text);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      margin-bottom: 2rem;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      animation: fadeUp 0.3s ease;
+    }
+
+    .form-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2.5rem;
+      animation: fadeUp 0.4s ease;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    select {
+      width: 100%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.85rem 1rem;
+      color: var(--cream);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--gold);
+    }
+
+    input[type="date"]::-webkit-calendar-picker-indicator {
+      filter: invert(0.6);
+      cursor: pointer;
+    }
+
+    .select-wrapper {
+      position: relative;
+    }
+
+    .select-wrapper::after {
+      content: '▾';
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      pointer-events: none;
+      font-size: 0.9rem;
+    }
+
+    select option {
+      background: var(--surface2);
+      color: var(--cream);
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 2rem 0;
+    }
+
+    .submit-btn {
+      width: 100%;
+      background: var(--gold);
+      border: none;
+      border-radius: 8px;
+      padding: 1rem;
+      color: var(--bg);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .submit-btn:hover {
+      background: var(--gold-light);
+      transform: translateY(-1px);
+    }
+
+    .submit-btn:active { transform: translateY(0); }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 1.5rem;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+    }
+
+    .back-link:hover { color: var(--gold); }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">Digital <span>Library</span></div>
+    <nav>
+      <a href="/">Bibliothek</a>
+      <a href="/add_book">+ Buch</a>
+      <a href="/add_author">+ Autor</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1 class="page-title">Buch <em>hinzufügen</em></h1>
+    <p class="page-subtitle">Füge ein neues Buch zur Bibliothek hinzu.</p>
+
+    {% if success %}
+    <div class="success-banner">
+      ✓ Buch erfolgreich hinzugefügt!
+    </div>
+    {% endif %}
+
+    <div class="form-card">
+      <form action="/add_book" method="POST">
+        <div class="form-group">
+          <label for="title">Titel</label>
+          <input type="text" id="title" name="title" placeholder="z.B. Der Prozess" required>
+        </div>
+
+        <div class="two-col">
+          <div class="form-group">
+            <label for="isbn">ISBN</label>
+            <input type="text" id="isbn" name="isbn" placeholder="978-3-..." required>
+          </div>
+          <div class="form-group">
+            <label for="publication_year">Erscheinungsjahr</label>
+            <input type="date" id="publication_year" name="publication_year" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="author_id">Autor</label>
+          <div class="select-wrapper">
+            <select id="author_id" name="author_id" required>
+              <option value="" disabled selected>Autor wählen...</option>
+              {% for author in authors %}
+                <option value="{{ author.id }}">{{ author.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+
+        <hr class="divider">
+
+        <button type="submit" class="submit-btn">Buch speichern</button>
+      </form>
+    </div>
+
+    <a class="back-link" href="/">← Zurück zur Bibliothek</a>
+  </main>
+
+</body>
+</html>
